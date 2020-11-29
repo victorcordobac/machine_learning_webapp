@@ -34,8 +34,32 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 import time
 
+#VARIABLES HTML
+def html(body):
+    st.markdown(body, unsafe_allow_html=True)
+def card_begin_str(header):
+    return (
+        "<style>div.card{background-color:lightblue;border-radius: 5px;box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);transition: 0.3s;}</style>"
+        '<div class="card">'
+        '<div class="container">'
+        f"<h3><b>{header}</b></h3>"
+    )
+def card_end_str():
+    return "</div></div>"
+def card(header, body):
+    lines = [card_begin_str(header), f"<p>{body}</p>", card_end_str()]
+    html("".join(lines))
+def br(n):
+    html(n * "<br>")
+#VARIABLES HTML
 
-st.title('Machine Learning Predictor')
+st.title('🌱 🌾 🌳 🥬 🥦 🥔 🍓')
+st.title('🙋‍♂️ MUJEER, TENGO TIERRAS 🏝 PREDICTOR 🔮')
+
+html(card_begin_str("🆘 AYUDA"))
+st.info("Sube un archivo 📂 CSV con una lista de variables ordenadas por columnas, y plotéalas de diferentes maneras, para sacar predicciones a través de regresiones y todas esas vainas")
+html(card_end_str())
+
 
 # Main Predicor class
 class Predictor:
@@ -63,7 +87,7 @@ class Predictor:
 
         # Set target column
         target_options = data.columns
-        self.chosen_target = st.sidebar.selectbox("Please choose target column", (target_options))
+        self.chosen_target = st.sidebar.selectbox("VARIABLE DE DESTINO", (target_options))
 
         # Standardize the feature data
         X = data.loc[:, data.columns != self.chosen_target]
@@ -77,25 +101,25 @@ class Predictor:
         try:
             self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X, y, test_size=(1 - train_test/100), random_state=42)
         except:
-            st.markdown('<span style="color:red">With this amount of data and split size the train data will have no records, <br /> Please change reduce and split parameter <br /> </span>', unsafe_allow_html=True)  
+            st.markdown('<span style="color:red">Con esta cantidad de datos y tamaño de corte, el tren de datos no tendrá registros, <br /> Porfaplis, cambia el parametro de reducción y corte/división <br /> </span>', unsafe_allow_html=True)  
 
     # Classifier type and algorithm selection 
     def set_classifier_properties(self):
-        self.type = st.sidebar.selectbox("Algorithm type", ("Classification", "Regression", "Clustering"))
-        if self.type == "Regression":
-            self.chosen_classifier = st.sidebar.selectbox("Please choose a classifier", ('Random Forest', 'Linear Regression', 'Neural Network')) 
-            if self.chosen_classifier == 'Random Forest': 
+        self.type = st.sidebar.selectbox("TIPO DE ALGORITMO", ("Clasificación", "Regresión", "Clustering"))
+        if self.type == "Regresión":
+            self.chosen_classifier = st.sidebar.selectbox("CLASIFICADOR", ('Bosques Aleatorios', 'Regresión Lineal', 'Red Neuronal')) 
+            if self.chosen_classifier == 'Bosques Aleatorios': 
                 self.n_trees = st.sidebar.slider('number of trees', 1, 1000, 1)
-            elif self.chosen_classifier == 'Neural Network':
+            elif self.chosen_classifier == 'Red Neuronal':
                 self.epochs = st.sidebar.slider('number of epochs', 1 ,100 ,10)
-                self.learning_rate = float(st.sidebar.text_input('learning rate:', '0.001'))
-        elif self.type == "Classification":
-            self.chosen_classifier = st.sidebar.selectbox("Please choose a classifier", ('Logistic Regression', 'Naive Bayes', 'Neural Network')) 
-            if self.chosen_classifier == 'Logistic Regression': 
+                self.learning_rate = float(st.sidebar.text_input('learning ratio:', '0.001'))
+        elif self.type == "Clasificación":
+            self.chosen_classifier = st.sidebar.selectbox("CLASIFICADOR", ('Regresión Logística', 'Naive Bayes algorithm', 'Red Neuronal')) 
+            if self.chosen_classifier == 'Regresión Logística': 
                 self.max_iter = st.sidebar.slider('max iterations', 1, 100, 10)
-            elif self.chosen_classifier == 'Neural Network':
+            elif self.chosen_classifier == 'Red Neuronal':
                 self.epochs = st.sidebar.slider('number of epochs', 1 ,100 ,10)
-                self.learning_rate = float(st.sidebar.text_input('learning rate:', '0.001'))
+                self.learning_rate = float(st.sidebar.text_input('learning ratio:', '0.001'))
                 self.number_of_classes = int(st.sidebar.text_input('Number of classes', '2'))
 
         
@@ -105,8 +129,8 @@ class Predictor:
     # Model training and predicitons 
     def predict(self, predict_btn):    
 
-        if self.type == "Regression":    
-            if self.chosen_classifier == 'Random Forest':
+        if self.type == "Regresión":    
+            if self.chosen_classifier == 'Bosques Aleatorios':
                 self.alg = RandomForestRegressor(max_depth=2, random_state=0, n_estimators=self.n_trees)
                 self.model = self.alg.fit(self.X_train, self.y_train)
                 predictions = self.alg.predict(self.X_test)
@@ -114,14 +138,14 @@ class Predictor:
                 self.predictions = predictions
                 
             
-            elif self.chosen_classifier=='Linear Regression':
+            elif self.chosen_classifier=='Regresión lineal':
                 self.alg = LinearRegression()
                 self.model = self.alg.fit(self.X_train, self.y_train)
                 predictions = self.alg.predict(self.X_test)
                 self.predictions_train = self.alg.predict(self.X_train)
                 self.predictions = predictions
 
-            elif self.chosen_classifier=='Neural Network':
+            elif self.chosen_classifier=='Red Neuronal':
                 model = Sequential()
                 model.add(Dense(500, input_dim = len(self.X_train.columns), activation='relu',))
                 model.add(Dense(50, activation='relu'))
@@ -134,22 +158,22 @@ class Predictor:
                 self.predictions = model.predict(self.X_test)
                 self.predictions_train = model.predict(self.X_train)
 
-        elif self.type == "Classification":
-            if self.chosen_classifier == 'Logistic Regression':
+        elif self.type == "Clasificación":
+            if self.chosen_classifier == 'Regresión Logística':
                 self.alg = LogisticRegression()
                 self.model = self.alg.fit(self.X_train, self.y_train)
                 predictions = self.alg.predict(self.X_test)
                 self.predictions_train = self.alg.predict(self.X_train)
                 self.predictions = predictions
         
-            elif self.chosen_classifier=='Naive Bayes':
+            elif self.chosen_classifier=='Naive Bayes algorithm':
                 self.alg = GaussianNB()
                 self.model = self.alg.fit(self.X_train, self.y_train)
                 predictions = self.alg.predict(self.X_test)
                 self.predictions_train = self.alg.predict(self.X_train)
                 self.predictions = predictions
 
-            elif self.chosen_classifier=='Neural Network':
+            elif self.chosen_classifier=='Red Neuronal':
                 model = Sequential()
                 model.add(Dense(500, input_dim = len(self.X_train.columns), activation='relu'))
                 model.add(Dense(50, activation='relu'))
@@ -180,17 +204,17 @@ class Predictor:
     # Get the result metrics of the model
     def get_metrics(self):
         self.error_metrics = {}
-        if self.type == 'Regression':
+        if self.type == 'Regresión':
             self.error_metrics['MSE_test'] = mean_squared_error(self.y_test, self.predictions)
             self.error_metrics['MSE_train'] = mean_squared_error(self.y_train, self.predictions_train)
-            return st.markdown('### MSE Train: ' + str(round(self.error_metrics['MSE_train'], 3)) + 
-            ' -- MSE Test: ' + str(round(self.error_metrics['MSE_test'], 3)))
+            return st.markdown('### MSE APRENDIZAJE: ' + str(round(self.error_metrics['MSE_train'], 3)) + 
+            ' -- MSE PREDICCIONES: ' + str(round(self.error_metrics['MSE_test'], 3)))
 
-        elif self.type == 'Classification':
+        elif self.type == 'Clasificación':
             self.error_metrics['Accuracy_test'] = accuracy_score(self.y_test, self.predictions)
             self.error_metrics['Accuracy_train'] = accuracy_score(self.y_train, self.predictions_train)
-            return st.markdown('### Accuracy Train: ' + str(round(self.error_metrics['Accuracy_train'], 3)) +
-            ' -- Accuracy Test: ' + str(round(self.error_metrics['Accuracy_test'], 3)))
+            return st.markdown('### Precisión aprendida: ' + str(round(self.error_metrics['Accuracy_train'], 3)) +
+            ' -- Precisión de estimaciones: ' + str(round(self.error_metrics['Accuracy_test'], 3)))
 
     # Plot the predicted values and real values
     def plot_result(self):
@@ -199,14 +223,14 @@ class Predictor:
 
         s1 = figure(plot_width=800, plot_height=500, background_fill_color="#fafafa")
         s1.circle(self.result_train.index, self.result_train.Actual_Train, size=12, color="Black", alpha=1, legend_label = "Actual")
-        s1.triangle(self.result_train.index, self.result_train.Prediction_Train, size=12, color="Red", alpha=1, legend_label = "Prediction")
-        tab1 = Panel(child=s1, title="Train Data")
+        s1.triangle(self.result_train.index, self.result_train.Prediction_Train, size=12, color="Red", alpha=1, legend_label = "Predicción")
+        tab1 = Panel(child=s1, title="Datos aprendidos")
 
         if self.result.Actual is not None:
             s2 = figure(plot_width=800, plot_height=500, background_fill_color="#fafafa")
             s2.circle(self.result.index, self.result.Actual, size=12, color=Set3[5][3], alpha=1, legend_label = "Actual")
-            s2.triangle(self.result.index, self.result.Prediction, size=12, color=Set3[5][4], alpha=1, legend_label = "Prediction")
-            tab2 = Panel(child=s2, title="Test Data")
+            s2.triangle(self.result.index, self.result.Prediction, size=12, color=Set3[5][4], alpha=1, legend_label = "Predicción")
+            tab2 = Panel(child=s2, title="Datos de estimaciones")
             tabs = Tabs(tabs=[ tab1, tab2 ])
         else:
 
@@ -217,12 +241,12 @@ class Predictor:
        
     # File selector module for web app
     def file_selector(self):
-        file = st.sidebar.file_uploader("Choose a CSV file", type="csv")
+        file = st.sidebar.file_uploader("Elige un archivo CSV", type="csv")
         if file is not None:
             data = pd.read_csv(file)
             return data
         else:
-            st.text("Please upload a csv file")
+            st.info("PORFA, sube un archivo CSV o te reviento. Como me subas un excel te voy a tener que matar")
         
     
     def print_table(self):
@@ -231,7 +255,7 @@ class Predictor:
             st.dataframe(result.sort_values(by='Actual',ascending=False).style.highlight_max(axis=0))
     
     def set_features(self):
-        self.features = st.multiselect('Please choose the features including target variable that go into the model', self.data.columns )
+        self.features = st.multiselect('Elige las características, incluida la variable de destino, que quieras incluir en el modelo', self.data.columns )
 
 if __name__ == '__main__':
     controller = Predictor()
@@ -239,20 +263,20 @@ if __name__ == '__main__':
         controller.data = controller.file_selector()
 
         if controller.data is not None:
-            split_data = st.sidebar.slider('Randomly reduce data size %', 1, 100, 10 )
-            train_test = st.sidebar.slider('Train-test split %', 1, 99, 66 )
+            split_data = st.sidebar.slider('Reducción aleatoria del tamaño de datos%', 1, 100, 10 )
+            train_test = st.sidebar.slider('División prendido-Predición  %', 1, 99, 66 )
         controller.set_features()
         if len(controller.features) > 1:
             controller.prepare_data(split_data, train_test)
             controller.set_classifier_properties()
-            predict_btn = st.sidebar.button('Predict')  
+            predict_btn = st.sidebar.button('Predecir 🚀')  
     except (AttributeError, ParserError, KeyError) as e:
-        st.markdown('<span style="color:blue">WRONG FILE TYPE</span>', unsafe_allow_html=True)  
+        st.markdown('<span style="color:blue">TIPO DE ARCHIVO ERRÓNEO</span>', unsafe_allow_html=True)  
 
 
     if controller.data is not None and len(controller.features) > 1:
         if predict_btn:
-            st.sidebar.text("Progress:")
+            st.sidebar.text("Progreso:")
             my_bar = st.sidebar.progress(0)
             predictions, predictions_train, result, result_train = controller.predict(predict_btn)
             for percent_complete in range(100):
@@ -264,14 +288,14 @@ if __name__ == '__main__':
 
             data = controller.result.to_csv(index=False)
             b64 = base64.b64encode(data.encode()).decode()  # some strings <-> bytes conversions necessary here
-            href = f'<a href="data:file/csv;base64,{b64}">Download Results</a> (right-click and save as &lt;some_name&gt;.csv)'
+            href = f'<a href="data:file/csv;base64,{b64}">Descargar los resultados fresquitos</a> (right-click and save as &lt;some_name&gt;.csv)'
             st.sidebar.markdown(href, unsafe_allow_html=True)
 
 
     
     if controller.data is not None:
-        if st.sidebar.checkbox('Show raw data'):
-            st.subheader('Raw data')
+        if st.sidebar.checkbox('Mostrar datos originales'):
+            st.subheader('Datos originales')
             st.write(controller.data)
     
 
