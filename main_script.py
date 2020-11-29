@@ -112,11 +112,11 @@ class Predictor:
                 self.n_trees = st.sidebar.slider('Nº de árboles', 1, 1000, 1)
             elif self.chosen_classifier == 'Red Neuronal 🧠':
                 self.epochs = st.sidebar.slider('Nº de epochs 👾', 1 ,100 ,10)
-                self.learning_rate = float(st.sidebar.text_input('learning ratio:', '0.001'))
+                self.learning_rate = float(st.sidebar.text_input('Ratio de aprendizaje:', '0.001'))
         elif self.type == "Clasificación":
             self.chosen_classifier = st.sidebar.selectbox("CLASIFICADOR 📈", ('Regresión Logística', 'Naive Bayes algorithm', 'Red Neuronal 🧠')) 
             if self.chosen_classifier == 'Regresión Logística': 
-                self.max_iter = st.sidebar.slider('max iterations', 1, 100, 10)
+                self.max_iter = st.sidebar.slider('Repeticiones Máximas', 1, 100, 10)
             elif self.chosen_classifier == 'Red Neuronal 🧠':
                 self.epochs = st.sidebar.slider('Nº de epochs 👾', 1 ,100 ,10)
                 self.learning_rate = float(st.sidebar.text_input('Ratio de aprendizaje:', '0.001'))
