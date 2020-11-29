@@ -108,16 +108,16 @@ class Predictor:
         self.type = st.sidebar.selectbox("TIPO DE ALGORITMO 🤔", ("Clasificación", "Regresión", "Clustering 🐙"))
         if self.type == "Regresión":
             self.chosen_classifier = st.sidebar.selectbox("CLASIFICADOR 📈", ('Bosques Aleatorios 🌳', 'Regresión Lineal', 'Red Neuronal 🧠')) 
-            if self.chosen_classifier == 'Bosques Aleatorios': 
+            if self.chosen_classifier == 'Bosques Aleatorios 🌳': 
                 self.n_trees = st.sidebar.slider('Nº de árboles', 1, 1000, 1)
-            elif self.chosen_classifier == 'Red Neuronal':
+            elif self.chosen_classifier == 'Red Neuronal 🧠':
                 self.epochs = st.sidebar.slider('Nº de epochs 👾', 1 ,100 ,10)
                 self.learning_rate = float(st.sidebar.text_input('learning ratio:', '0.001'))
         elif self.type == "Clasificación":
             self.chosen_classifier = st.sidebar.selectbox("CLASIFICADOR 📈", ('Regresión Logística', 'Naive Bayes algorithm', 'Red Neuronal 🧠')) 
             if self.chosen_classifier == 'Regresión Logística': 
                 self.max_iter = st.sidebar.slider('max iterations', 1, 100, 10)
-            elif self.chosen_classifier == 'Red Neuronal':
+            elif self.chosen_classifier == 'Red Neuronal 🧠':
                 self.epochs = st.sidebar.slider('Nº de epochs 👾', 1 ,100 ,10)
                 self.learning_rate = float(st.sidebar.text_input('Ratio de aprendizaje:', '0.001'))
                 self.number_of_classes = int(st.sidebar.text_input('Número de clases', '2'))
