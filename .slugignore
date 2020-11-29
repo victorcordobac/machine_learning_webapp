@@ -1,0 +1,10 @@
+*.psd
+*.pdf
+*.csv
+test
+spec
+features
+doc
+public
+Dockerfile
+tempCodeRunnerFile.py
