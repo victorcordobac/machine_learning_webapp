@@ -87,7 +87,7 @@ class Predictor:
 
         # Set target column
         target_options = data.columns
-        self.chosen_target = st.sidebar.selectbox("VARIABLE DE DESTINO", (target_options))
+        self.chosen_target = st.sidebar.selectbox("COLUMNA OBJETIVO 🎯 ", (target_options))
 
         # Standardize the feature data
         X = data.loc[:, data.columns != self.chosen_target]
@@ -105,32 +105,32 @@ class Predictor:
 
     # Classifier type and algorithm selection 
     def set_classifier_properties(self):
-        self.type = st.sidebar.selectbox("TIPO DE ALGORITMO", ("Clasificación", "Regresión", "Clustering"))
+        self.type = st.sidebar.selectbox("TIPO DE ALGORITMO 🤔", ("Clasificación", "Regresión", "Clustering 🐙"))
         if self.type == "Regresión":
-            self.chosen_classifier = st.sidebar.selectbox("CLASIFICADOR", ('Bosques Aleatorios', 'Regresión Lineal', 'Red Neuronal')) 
+            self.chosen_classifier = st.sidebar.selectbox("CLASIFICADOR 📈", ('Bosques Aleatorios 🌳', 'Regresión Lineal', 'Red Neuronal 🧠')) 
             if self.chosen_classifier == 'Bosques Aleatorios': 
-                self.n_trees = st.sidebar.slider('number of trees', 1, 1000, 1)
+                self.n_trees = st.sidebar.slider('Nº de árboles', 1, 1000, 1)
             elif self.chosen_classifier == 'Red Neuronal':
-                self.epochs = st.sidebar.slider('number of epochs', 1 ,100 ,10)
+                self.epochs = st.sidebar.slider('Nº de epochs 👾', 1 ,100 ,10)
                 self.learning_rate = float(st.sidebar.text_input('learning ratio:', '0.001'))
         elif self.type == "Clasificación":
-            self.chosen_classifier = st.sidebar.selectbox("CLASIFICADOR", ('Regresión Logística', 'Naive Bayes algorithm', 'Red Neuronal')) 
+            self.chosen_classifier = st.sidebar.selectbox("CLASIFICADOR 📈", ('Regresión Logística', 'Naive Bayes algorithm', 'Red Neuronal 🧠')) 
             if self.chosen_classifier == 'Regresión Logística': 
                 self.max_iter = st.sidebar.slider('max iterations', 1, 100, 10)
             elif self.chosen_classifier == 'Red Neuronal':
-                self.epochs = st.sidebar.slider('number of epochs', 1 ,100 ,10)
-                self.learning_rate = float(st.sidebar.text_input('learning ratio:', '0.001'))
-                self.number_of_classes = int(st.sidebar.text_input('Number of classes', '2'))
+                self.epochs = st.sidebar.slider('Nº de epochs 👾', 1 ,100 ,10)
+                self.learning_rate = float(st.sidebar.text_input('Ratio de aprendizaje:', '0.001'))
+                self.number_of_classes = int(st.sidebar.text_input('Número de clases', '2'))
 
         
-        elif self.type == "Clustering":
+        elif self.type == "Clustering 🐙":
             pass
 
     # Model training and predicitons 
     def predict(self, predict_btn):    
 
         if self.type == "Regresión":    
-            if self.chosen_classifier == 'Bosques Aleatorios':
+            if self.chosen_classifier == 'Bosques Aleatorios 🌳':
                 self.alg = RandomForestRegressor(max_depth=2, random_state=0, n_estimators=self.n_trees)
                 self.model = self.alg.fit(self.X_train, self.y_train)
                 predictions = self.alg.predict(self.X_test)
@@ -145,7 +145,7 @@ class Predictor:
                 self.predictions_train = self.alg.predict(self.X_train)
                 self.predictions = predictions
 
-            elif self.chosen_classifier=='Red Neuronal':
+            elif self.chosen_classifier=='Red Neuronal 🧠':
                 model = Sequential()
                 model.add(Dense(500, input_dim = len(self.X_train.columns), activation='relu',))
                 model.add(Dense(50, activation='relu'))
@@ -173,7 +173,7 @@ class Predictor:
                 self.predictions_train = self.alg.predict(self.X_train)
                 self.predictions = predictions
 
-            elif self.chosen_classifier=='Red Neuronal':
+            elif self.chosen_classifier=='Red Neuronal 🧠':
                 model = Sequential()
                 model.add(Dense(500, input_dim = len(self.X_train.columns), activation='relu'))
                 model.add(Dense(50, activation='relu'))
@@ -263,8 +263,8 @@ if __name__ == '__main__':
         controller.data = controller.file_selector()
 
         if controller.data is not None:
-            split_data = st.sidebar.slider('Reducción aleatoria del tamaño de datos%', 1, 100, 10 )
-            train_test = st.sidebar.slider('División prendido-Predición  %', 1, 99, 66 )
+            split_data = st.sidebar.slider('Reducir aleatoriamente el tamaño de datos %', 1, 100, 10 )
+            train_test = st.sidebar.slider('Ratio Aprendido-Predición  %', 1, 99, 66 )
         controller.set_features()
         if len(controller.features) > 1:
             controller.prepare_data(split_data, train_test)
@@ -288,7 +288,7 @@ if __name__ == '__main__':
 
             data = controller.result.to_csv(index=False)
             b64 = base64.b64encode(data.encode()).decode()  # some strings <-> bytes conversions necessary here
-            href = f'<a href="data:file/csv;base64,{b64}">Descargar los resultados fresquitos</a> (right-click and save as &lt;some_name&gt;.csv)'
+            href = f'<a href="data:file/csv;base64,{b64}">Descargar los resultados fresquitos</a> (Click derecho y guárdala como &lt;nombre-que-quieras&gt;.csv)'
             st.sidebar.markdown(href, unsafe_allow_html=True)
 
 
@@ -303,4 +303,5 @@ if __name__ == '__main__':
 
 
 
+st.info("Desarollado por el equipo MY FIELD para AURAVANTHACK")
 
