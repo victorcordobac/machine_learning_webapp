@@ -54,10 +54,10 @@ def br(n):
 #VARIABLES HTML
 
 st.title('🌱 🌾 🌳 🥬 🥦 🥔 🍓')
-st.title('🙋‍♂️ MUJEER, TENGO TIERRAS 🏝 PREDICTOR 🔮')
+st.title('🙋‍♂️ MIS TIERRAS 🏝 PREDICTOR 🔮')
 
 html(card_begin_str("🆘 AYUDA"))
-st.info("Sube un archivo 📂 CSV con una lista de variables ordenadas por columnas, y plotéalas de diferentes maneras, para sacar predicciones a través de regresiones y todas esas vainas")
+st.info("Sube un archivo 📂 CSV con una lista de variables ordenadas por columnas, y plotéalas de diferentes maneras, para obtener predicciones a través de MACHINE LEARNING")
 html(card_end_str())
 
 
@@ -101,7 +101,7 @@ class Predictor:
         try:
             self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(X, y, test_size=(1 - train_test/100), random_state=42)
         except:
-            st.markdown('<span style="color:red">Con esta cantidad de datos y tamaño de corte, el tren de datos no tendrá registros, <br /> Porfaplis, cambia el parametro de reducción y corte/división <br /> </span>', unsafe_allow_html=True)  
+            st.markdown('<span style="color:red">Con esta cantidad de datos y tamaño de corte, el tren de datos no tendrá registros, <br /> Porfaplis, cambia en la columna de la izquierda el parametro de reducción aleatoria de datos o el ratio aprendido/predicción <br /> </span>', unsafe_allow_html=True)  
 
     # Classifier type and algorithm selection 
     def set_classifier_properties(self):
@@ -246,7 +246,7 @@ class Predictor:
             data = pd.read_csv(file)
             return data
         else:
-            st.info("PORFA, sube un archivo CSV o te reviento. Como me subas un excel te voy a tener que matar")
+            st.info("Por favor, sube un archivo tipo CSV")
         
     
     def print_table(self):
